@@ -4,13 +4,16 @@
 #include <math.h>
 
 void drawlandscape(FILE * landscape, char * filename, FILE * sketch);
-void drawship(FILE * sketch);
-struct ship{
+void drawship (FILE * sketch);
+void drawthrust (FILE * sketch);
+
+struct pos{
     double x;
     double y;
 };
 
-struct ship shuttle[4];
+struct pos shuttle[4];
+struct pos thurst[2];
 
 int main(int argc, char * argv[])
 {
@@ -27,6 +30,7 @@ int main(int argc, char * argv[])
         {
             drawlandscape(landscape, argv[i], sketch);
             drawship(sketch);
+            drawthrust(sketch);
             fprintf (sketch,"end");
             fclose (landscape);
             pclose (sketch);
@@ -63,5 +67,20 @@ void drawship (FILE * sketch){
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[1].x),lround(shuttle[1].y),lround(shuttle[2].x),lround(shuttle[2].y));
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(shuttle[3].x),lround(shuttle[3].y));
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(shuttle[0].x),lround(shuttle[0].y));
-    fprintf(sketch, "pause 5\n");
+    
 }/* drawship */
+
+void drawthrust (FILE * sketch){
+    thurst[0].x=shuttle[3].x+20;
+    thurst[0].y=shuttle[3].y+10;
+    thurst[1].x=thurst[0].x;
+    thurst[1].y=thurst[0].y+20;
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[0].x),lround(thurst[0].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[0].x),lround(thurst[0].y));
+    fprintf(sketch, "pause 1\n");
+    fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[0].x),lround(thurst[0].y));
+    fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[0].x),lround(thurst[0].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[1].x),lround(thurst[1].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[1].x),lround(thurst[1].y));
+    fprintf(sketch, "pause 1\n");
+}/* drawthrust */
