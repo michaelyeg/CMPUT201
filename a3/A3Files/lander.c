@@ -4,8 +4,15 @@
 #include <math.h>
 
 void drawlandscape(FILE * landscape, char * filename, FILE * sketch);
+void drawship(FILE * sketch);
+struct ship{
+    double x;
+    double y;
+};
 
-int main(int argc, char*argv[])
+struct ship shuttle[4];
+
+int main(int argc, char * argv[])
 {
     FILE * landscape;
     FILE * sketch;
@@ -19,6 +26,8 @@ int main(int argc, char*argv[])
         else
         {
             drawlandscape(landscape, argv[i], sketch);
+            drawship(sketch);
+            fprintf (sketch,"end");
             fclose (landscape);
             pclose (sketch);
         }
@@ -36,9 +45,23 @@ void drawlandscape(FILE * landscape, char * filename, FILE * sketch){
         free (line);
     }/* while */
     free (line);
-    
     for (int j=0; j<5; j+=1){
         fprintf(sketch, "drawSegment %ld %ld %ld %ld\n",lround(coordinate[2*j]),lround(coordinate[2*j+1]),lround(coordinate[2*j+2]),lround(coordinate[2*j+3]));
     }
-    fprintf(sketch, "pause 5\n");
 }/* drawlandscape */
+
+void drawship (FILE * sketch){
+    shuttle[0].x=320;
+    shuttle[0].y=0;
+    shuttle[1].x=340;
+    shuttle[1].y=0;
+    shuttle[2].x=350;
+    shuttle[2].y=15;
+    shuttle[3].x=310;
+    shuttle[3].y=15;
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[0].x),lround(shuttle[0].y),lround(shuttle[1].x),lround(shuttle[1].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[1].x),lround(shuttle[1].y),lround(shuttle[2].x),lround(shuttle[2].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(shuttle[3].x),lround(shuttle[3].y));
+    fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(shuttle[0].x),lround(shuttle[0].y));
+    fprintf(sketch, "pause 5\n");
+}/* drawship */
