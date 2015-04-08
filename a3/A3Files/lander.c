@@ -83,4 +83,6 @@ void drawthrust (FILE * sketch){
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[1].x),lround(thurst[1].y));
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[1].x),lround(thurst[1].y));
     fprintf(sketch, "pause 1\n");
+    fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[1].x),lround(thurst[1].y));
+    fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[1].x),lround(thurst[1].y));
 }/* drawthrust */
