@@ -2,15 +2,8 @@
 #include <stdio.h>
 #include <strings.h>
 #include <math.h>
-
-void drawlandscape(FILE * landscape, char * filename, FILE * sketch);
-void drawship (FILE * sketch);
-void drawthrust (FILE * sketch);
-
-struct pos{
-    double x;
-    double y;
-};
+#include <curses.h>
+#include "lander.h"
 
 struct pos shuttle[4];
 struct pos thurst[2];
@@ -20,6 +13,20 @@ int main(int argc, char * argv[])
     FILE * landscape;
     FILE * sketch;
     sketch=popen("java -jar Sketchpad.jar","w");
+    setup_curses();
+
+    move(5, 10);
+    printw("Press any key to start.");
+    refresh();
+    int c = getch();
+
+    nodelay(stdscr, true);
+    erase();
+
+    move(5, 10);
+    printw("Press arrow keys, 'q' to quit.");
+    refresh();
+    
     for (int i=1; i<argc; i++){
         landscape=fopen(argv[i],"r");
         if (landscape==NULL){
@@ -29,13 +36,32 @@ int main(int argc, char * argv[])
         else
         {
             drawlandscape(landscape, argv[i], sketch);
+	    fflush(sketch);
             drawship(sketch);
-            drawthrust(sketch);
-            fprintf (sketch,"end");
-            fclose (landscape);
-            pclose (sketch);
+	    fflush(sketch);
         }
+    }/* for */
+    c = getch();
+    while (1){
+      if (c!=ERR){
+	erase();
+	move (5,10);
+	printw("left arrow key rotates counter-clockwise, right for clockwise, space for thrust, q to quit.");
+	move (6,10);
+	if (c==' '){
+	  drawthrust(sketch);
+	  fflush(sketch);
+	}
+	else if (c=='q'){
+	  fprintf (sketch,"end");
+	  break;
+	}
+	refresh();
+      }
+      c=getch();
     }
+    unset_curses();
+    exit(EXIT_SUCCESS);
     return (0);
 }
 
@@ -86,3 +112,20 @@ void drawthrust (FILE * sketch){
     fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(thurst[1].x),lround(thurst[1].y));
     fprintf(sketch,"eraseSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(thurst[1].x),lround(thurst[1].y));
 }/* drawthrust */
+
+void setup_curses()
+{
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, true);
+}/* setup_curses */
+
+void unset_curses()
+{
+    keypad(stdscr, false);
+    nodelay(stdscr, false);
+    nocbreak();
+    echo();
+    endwin();
+}/* unset_curses */
