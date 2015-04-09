@@ -12,11 +12,13 @@ int main(int argc, char * argv[])
 {
     FILE * landscape;
     FILE * sketch;
+    //double angle=90;
+    //double angle_rad=angle*PI/180.0;
     sketch=popen("java -jar Sketchpad.jar","w");
     setup_curses();
 
     move(5, 10);
-    printw("Press any key to start.");
+    printw("Press any key to start.\n");
     refresh();
     int c = getch();
 
@@ -24,7 +26,7 @@ int main(int argc, char * argv[])
     erase();
 
     move(5, 10);
-    printw("Press arrow keys, 'q' to quit.");
+    printw("left arrow key rotates counter-clockwise, right for clockwise, space for thrust, q to quit.\n");
     refresh();
     
     for (int i=1; i<argc; i++){
@@ -93,7 +95,7 @@ void drawship (FILE * sketch){
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[1].x),lround(shuttle[1].y),lround(shuttle[2].x),lround(shuttle[2].y));
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[2].x),lround(shuttle[2].y),lround(shuttle[3].x),lround(shuttle[3].y));
     fprintf(sketch,"drawSegment %ld %ld %ld %ld\n",lround(shuttle[3].x),lround(shuttle[3].y),lround(shuttle[0].x),lround(shuttle[0].y));
-    
+    update_midpoint();
 }/* drawship */
 
 void drawthrust (FILE * sketch){
@@ -129,3 +131,12 @@ void unset_curses()
     echo();
     endwin();
 }/* unset_curses */
+
+void update_midpoint(){
+    x_min=min(shuttle[0].x,shuttle[1].x,shuttle[2].x,shuttle[3].x);
+    x_max=max(shuttle[0].x,shuttle[1].x,shuttle[2].x,shuttle[3].x);
+    y_min=min(shuttle[0].y,shuttle[1].y,shuttle[2].y,shuttle[3].y);
+    y_max=max(shuttle[0].y,shuttle[1].y,shuttle[2].y,shuttle[3].y);
+    x_mid=0.5*(x_min+x_max);
+    y_mid=0.5*(y_min+y_max);
+}
