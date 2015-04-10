@@ -1,9 +1,13 @@
+#define PI acos(-1.0)
+
 void drawlandscape(FILE * landscape, char * filename, FILE * sketch);
 void drawship (FILE * sketch);
 void drawthrust (FILE * sketch);
 void setup_curses();
 void unset_curses();
 void update_midpoint();
+void rotate_left(FILE * sketch);
+void rotate_right(FILE * sketch);
 
 FILE *popen(char *command, const char *type);
 int pclose(FILE *stream);
