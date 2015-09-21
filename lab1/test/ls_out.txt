@@ -1,0 +1,16 @@
+total 21K
+  345 1.0K C:\nppdf32Log\debuglog.txt
+   47 1.5K Desktop
+   51 1.5K Documents
+   48 1.5K Downloads
+   52 1.5K Music
+   53 1.5K Pictures
+   50 1.5K Public
+   49 1.5K Templates
+   54 1.5K Videos
+11893 1.5K a2_data.sql~
+10715 1.5K a2_setup.sql~
+ 5464  512 anagram.py~
+ 2279 1.5K c201
+10347 1.5K oradiag_xi
+ 1296 1.5K workspace
